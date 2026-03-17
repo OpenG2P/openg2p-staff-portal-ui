@@ -7,6 +7,7 @@ interface AuthContextType {
     isLoggedIn: boolean;
     user: any | null;
     logout: () => void;
+    handleUnauthorized: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -22,31 +23,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         window.location.href = '/api/logout';
     }, []);
 
-    useEffect(() => {
-        function onUnauthorized() {
-            setIsLoggedIn(false);
-            setUser(null);
-            window.location.href = `/api/login?redirect_uri=${encodeURIComponent(window.location.pathname)}`;
-        }
-
-        window.addEventListener('auth:unauthorized', onUnauthorized);
-        return () => window.removeEventListener('auth:unauthorized', onUnauthorized);
+    const handleUnauthorized = useCallback(() => {
+        setIsLoggedIn(false);
+        setUser(null);
+        window.location.href = `/api/login?redirect_uri=${encodeURIComponent(window.location.href)}`;
     }, []);
 
     useEffect(() => {
         async function initAuth() {
             try {
-                const res = await fetch('/api/me');
+                const res = await fetch("/api/me");
+
+                if (res.status === 401) {
+                    handleUnauthorized();
+                    return;
+                }
+
+                const data = await res.json();
 
                 if (res.ok) {
-                    const data = await res.json();
                     setUser(data);
                     setIsLoggedIn(true);
                 } else {
-                    window.location.href = `/api/login?redirect_uri=${encodeURIComponent(window.location.pathname)}`;
+                    console.log(data);
                 }
-            } catch {
-                window.location.href = `/api/login?redirect_uri=${encodeURIComponent(window.location.pathname)}`;
+
+            } catch (err) {
+                console.error("Request failed:", err);
             } finally {
                 setIsLoading(false);
             }
@@ -69,7 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!isLoggedIn) return null;
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, user, logout }}>
+        <AuthContext.Provider value={{ isLoggedIn, user, logout, handleUnauthorized }}>
             {children}
         </AuthContext.Provider>
     );

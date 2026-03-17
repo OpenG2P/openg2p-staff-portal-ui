@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-const BACKEND_URL = 'http://iam.openg2p.my/auth/start_authentication_transaction';
+import { getBackendConfig } from '../_lib/backend-config';
 
 export async function GET(req: NextRequest) {
     const redirectUri = req.nextUrl.searchParams.get('redirect_uri') || '/';
 
-    const url = `${BACKEND_URL}?id=1&redirect_uri=${encodeURIComponent(redirectUri)}`;
+    const backendConfig = getBackendConfig()
+    const iamUrl = `${backendConfig.iamUrl}${"/auth/start_authentication_transaction"}`;
+
+    const url = `${iamUrl}?id=1&redirect_uri=${encodeURIComponent(redirectUri)}`;
 
     const res = await fetch(url, {
         method: 'POST',

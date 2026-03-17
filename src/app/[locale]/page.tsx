@@ -9,7 +9,7 @@ export default function Home() {
             id: 1,
             name: "Registry",
             icon: "/openg2p_logo_white.svg",
-            url: "https://registry.yourdomain.com",
+            url: "http://farmer-registry.openg2p.my",
             imgWidth: 40,
             imgHeight: 40,
         },

@@ -10,7 +10,7 @@ interface AppCard {
     icon_base64: string;
     width: number;
     disabled: boolean;
-    url: string;
+    application_url: string;
 }
 
 export default function Home() {
@@ -40,7 +40,7 @@ export default function Home() {
                             key={card.id}
                             onClick={() => {
                                 if (!card.disabled) {
-                                    window.open(card.url, "_blank");
+                                    window.open(card.application_url, "_blank");
                                 }
                             }}
                             className={`relative overflow-hidden h-38.25 bg-black p-7.5 flex flex-col justify-between border-[#292929] border-r border-b nth-[4n+1]:border-l nth-[-n+4]:border-t ${card.disabled ? "cursor-not-allowed" : "cursor-pointer group"}`}

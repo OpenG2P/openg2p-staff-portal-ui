@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
     const backendConfig = getBackendConfig()
     const iamUrl = `${backendConfig.iamUrl}${"/auth/start_authentication_transaction"}`;
 
-    const url = `${iamUrl}?id=1&redirect_uri=${encodeURIComponent(redirectUri)}`;
+    const url = `${iamUrl}?id=${backendConfig.loginProviderId}&redirect_uri=${encodeURIComponent(redirectUri)}`;
 
     const res = await fetch(url, {
         method: 'POST',

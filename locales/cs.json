@@ -1,5 +1,8 @@
 {
     "en": "English",
     "de": "Deutsch",
-    "cs": "Čeština"
+    "cs": "Čeština",
+    "user": "Uživatel",
+    "my_profile": "Můj profil",
+    "logout": "Odhlásit se"
 }

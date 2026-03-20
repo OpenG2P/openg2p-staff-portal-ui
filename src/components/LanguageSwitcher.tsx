@@ -8,9 +8,9 @@ import React, { useRef, useState, useTransition } from 'react';
 import { useClickOutside } from '@/shared/hooks/useClickOutside';
 
 const flagMap: Record<string, string> = {
-    en: '/images/common/flags/en_flag.png',
-    de: '/images/common/flags/de_flag.png',
-    cs: '/images/common/flags/cs_flag.png',
+    en: '/en_flag.png',
+    de: '/de_flag.png',
+    cs: '/cs_flag.png',
 };
 
 export default function LanguageSwitcher() {
@@ -32,7 +32,7 @@ export default function LanguageSwitcher() {
         });
     };
 
-    const currentFlag = flagMap[locale] || '/images/common/flags/en_flag.png';
+    const currentFlag = flagMap[locale] || '/en_flag.png';
 
     return (
         <div className="relative inline-block" ref={dropdownRef}>
@@ -58,7 +58,7 @@ export default function LanguageSwitcher() {
                 </div>
 
                 <Image
-                    src="/images/common/down_arrow.png"
+                    src="/down_arrow.png"
                     alt="toggle"
                     width={14}
                     height={14}
@@ -79,7 +79,7 @@ export default function LanguageSwitcher() {
                             <div className="flex items-center gap-2">
                                 <div className="w-6 h-4 relative rounded-sm overflow-hidden shrink-0 border">
                                     <Image
-                                        src={flagMap[loc] || '/images/common/flags/en_flag.png'}
+                                        src={flagMap[loc] || '/en_flag.png'}
                                         alt={loc}
                                         fill
                                         sizes="28px"
@@ -90,7 +90,7 @@ export default function LanguageSwitcher() {
                             </div>
                             {index === 0 && (
                                 <Image
-                                    src="/images/common/down_arrow.png"
+                                    src="/down_arrow.png"
                                     alt="selected"
                                     width={14}
                                     height={14}

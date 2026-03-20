@@ -1,1 +1,8 @@
-{}
+{
+    "en": "English",
+    "de": "Deutsch",
+    "cs": "Čeština",
+    "user": "User",
+    "my_profile": "My Profile",
+    "logout": "Logout"
+}

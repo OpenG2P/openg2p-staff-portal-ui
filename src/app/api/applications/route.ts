@@ -5,8 +5,10 @@ import { getBackendConfig } from '../_lib/backend-config';
 export async function GET(req: NextRequest) {
     const auth = requireAuth(req);
     if (auth instanceof NextResponse) return auth;
-    const backendConfig = getBackendConfig()
-    const iamUrl = `${backendConfig.iamUrl}${"/auth/get_user_profile"}`;
+
+    const backendConfig = getBackendConfig();
+
+    const iamUrl = `${backendConfig.iamUrl}/auth/get_staff_portal_applications`;
 
     const res = await fetch(iamUrl, {
         method: 'GET',

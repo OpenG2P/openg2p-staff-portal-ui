@@ -1,83 +1,26 @@
 'use client';
 
 import Image from "next/image";
+import { useEffect, useState } from "react";
+
+
+interface AppCard {
+    id: number;
+    application_description: string;
+    icon_base64: string;
+    width: number;
+    disabled: boolean;
+    application_url: string;
+}
 
 export default function Home() {
+    const [cards, setCards] = useState<AppCard[]>([]);
 
-    const cards = [
-        {
-            id: 1,
-            name: "Registry",
-            icon: "/openg2p_logo_white.svg",
-            url: "https://registry.yourdomain.com",
-            imgWidth: 40,
-            imgHeight: 40,
-        },
-        {
-            id: 2,
-            name: "PBMS",
-            icon: "/openg2p_logo_white.svg",
-            url: "https://pbms.yourdomain.com",
-            imgWidth: 40,
-            imgHeight: 40,
-        },
-        {
-            id: 3,
-            name: "G2P Bridge",
-            icon: "/openg2p_logo_white.svg",
-            url: "https://g2pbridge.yourdomain.com",
-            imgWidth: 40,
-            imgHeight: 40,
-        },
-        {
-            id: 4,
-            name: "SPAR Mobile App",
-            icon: "/openg2p_logo_white.svg",
-            url: "https://spar.yourdomain.com",
-            imgWidth: 40,
-            imgHeight: 40,
-        },
-        {
-            id: 5,
-            name: "Rancher",
-            icon: "/rancher.svg",
-            url: "https://rancher.yourdomain.com",
-            imgWidth: 40,
-            imgHeight: 186,
-        },
-        {
-            id: 6,
-            name: "Superset",
-            icon: "/superset.svg",
-            url: "https://superset.yourdomain.com",
-            imgWidth: 40,
-            imgHeight: 142,
-        },
-        {
-            id: 7,
-            name: "Minio",
-            icon: "/minio.svg",
-            url: "https://minio.yourdomain.com",
-            imgWidth: 40,
-            imgHeight: 148,
-        },
-        {
-            id: 8,
-            name: "Master Data",
-            icon: "/master-data.svg",
-            url: "https://masterdata.yourdomain.com",
-            imgWidth: 40,
-            imgHeight: 40,
-        },
-        {
-            id: 9,
-            name: "Grievance Redressal",
-            icon: "/grievance.svg",
-            url: "https://grievance.yourdomain.com",
-            imgWidth: 40,
-            imgHeight: 40,
-        },
-    ];
+    useEffect(() => {
+        fetch("/api/applications")
+            .then(res => res.json())
+            .then(data => setCards(data));
+    }, []);
     return (
         <div className="w-full min-h-[calc(100vh-52px)] flex flex-col">
             <div className="w-full h-31.5 bg-[#E9BC19] flex flex-col items-center justify-center text-center">
@@ -95,23 +38,31 @@ export default function Home() {
                     {cards.map((card) => (
                         <div
                             key={card.id}
-                            onClick={() => window.open(card.url, "_blank")}
-                            className="relative group overflow-hidden h-38.25 bg-black p-7.5 flex flex-col justify-between border-[#292929] border-r border-b cursor-pointer nth-[4n+1]:border-l nth-[-n+4]:border-t"
+                            onClick={() => {
+                                if (!card.disabled) {
+                                    window.open(card.application_url, "_blank");
+                                }
+                            }}
+                            className={`relative overflow-hidden h-38.25 bg-black p-7.5 flex flex-col justify-between border-[#292929] border-r border-b nth-[4n+1]:border-l nth-[-n+4]:border-t ${card.disabled ? "cursor-not-allowed" : "cursor-pointer group"}`}
                         >
-                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500 bg-[radial-gradient(circle_at_0%_100%,rgba(233,188,25,0.40)_0%,rgba(233,188,25,0.25)_35%,rgba(233,188,25,0.12)_55%,transparent_75%)]" />
+                            {!card.disabled && (
+                                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500 bg-[radial-gradient(circle_at_0%_100%,rgba(233,188,25,0.40)_0%,rgba(233,188,25,0.25)_35%,rgba(233,188,25,0.12)_55%,transparent_75%)]" />
+                            )}
 
-                            <div className="relative z-10">
-                                <Image
-                                    src={card.icon}
-                                    alt={card.name}
-                                    width={card.imgWidth}
-                                    height={40}
-                                    className="h-10 w-auto object-contain"
-                                />
+                            <div className={`relative z-10 ${card.disabled ? "opacity-50" : ""}`}>
+                                {card.icon_base64 ? (
+                                    <img
+                                        src={`data:image/svg+xml;base64,${card.icon_base64}`}
+                                        className="h-10"
+                                        alt={card.application_description}
+                                    />
+                                ) : (
+                                    <div className="h-10 w-10 bg-gray-500" />
+                                )}
                             </div>
 
-                            <div className="relative z-10 text-white text-[20px] font-medium">
-                                {card.name}
+                            <div className={`relative z-10 text-white text-[20px] font-medium ${card.disabled ? "opacity-50" : ""}`}>
+                                {card.application_description}
                             </div>
                         </div>
                     ))}

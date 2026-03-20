@@ -1,1 +1,8 @@
-{}
+{
+    "en": "English",
+    "de": "Deutsch",
+    "cs": "Čeština",
+    "user": "Benutzer",
+    "my_profile": "Mein Profil",
+    "logout": "Abmelden"
+}

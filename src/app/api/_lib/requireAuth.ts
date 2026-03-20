@@ -7,18 +7,6 @@ export interface AuthContext {
     backendHeaders: Record<string, string>;
 }
 
-export function withAuth(req: NextRequest): AuthContext {
-    const token = req.cookies.get(TOKEN_COOKIE)?.value ?? '';
-    return {
-        token,
-        backendHeaders: {
-            'Content-Type': 'application/json',
-            accept: 'application/json',
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-    };
-}
-
 export function requireAuth(req: NextRequest): AuthContext | NextResponse {
     const token = req.cookies.get(TOKEN_COOKIE)?.value;
 

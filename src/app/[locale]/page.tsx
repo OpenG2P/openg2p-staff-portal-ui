@@ -29,7 +29,7 @@ export default function Home() {
                 </h1>
 
                 <p className="mt-2 font-['Roboto'] font-normal text-[16px] leading-[100%]">
-                    OpenG2P enables governments and humanitarian organisations to deliver critical social benefits directly to those who need them.
+                    OpenG2P offers secure, open-source, and interoperable solutions to help governments and humanitarian organisations deliver social benefits efficiently.
                 </p>
             </div>
 
@@ -74,10 +74,19 @@ export default function Home() {
                     <div>
                         © 2026 OpenG2P.org. All Rights Reserved.
                     </div>
-                    <div className="flex items-center gap-30">
-                        <span className="cursor-pointer hover:text-[#E9BC19]">English</span>
-                        <span className="cursor-pointer hover:text-[#E9BC19]">Privacy Policy</span>
-                        <span className="cursor-pointer hover:text-[#E9BC19]">Contact Us</span>
+                    <div className="flex items-center gap-8">
+                        <span
+                            className="cursor-pointer hover:text-[#E9BC19]"
+                            onClick={() => window.open("https://www.openg2p.org/privacy-policy", "_blank")}
+                        >
+                            Privacy Policy
+                        </span>
+                        <span
+                            className="cursor-pointer hover:text-[#E9BC19]"
+                            onClick={() => window.open("https://www.openg2p.org", "_blank")}
+                        >
+                            Contact Us
+                        </span>
                     </div>
                 </div>
             </div>

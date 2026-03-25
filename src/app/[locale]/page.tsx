@@ -29,7 +29,7 @@ export default function Home() {
                 </h1>
 
                 <p className="mt-2 font-['Roboto'] font-normal text-[16px] leading-[100%]">
-                    Lorem Ipsum is simply dummy text of the printing.
+                    OpenG2P enables governments and humanitarian organisations to deliver critical social benefits directly to those who need them.
                 </p>
             </div>
 

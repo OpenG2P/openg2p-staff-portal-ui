@@ -1,0 +1,181 @@
+name: Build & Push Staff Portal UI Docker
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+    name: Docker - ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: openg2p-staff-portal-ui
+            serviceFile: openg2p-staff-portal-ui/staff-portal-ui.txt
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Docker Login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.docker_hub_actor }}
+          password: ${{ secrets.docker_hub_token }}
+
+      - name: Diagnostics (token envs, docker, proxy, buildx)
+        shell: bash
+        run: |
+          echo "== GH Actions runtime token envs (masked) =="
+          env | sort | grep -E '^(ACTIONS_|GITHUB_|RUNNER_)' || true
+          echo
+          echo "== Proxy configuration =="
+          env | sort | grep -E '^(HTTP|http|HTTPS|https|NO|no)_PROXY=' || true
+          echo
+          echo "== Docker info =="
+          docker info || true
+          echo
+          echo "== Buildx version =="
+          docker buildx version || true
+          echo
+          echo "== Builder info =="
+          docker buildx ls || true
+
+      - name: Read service file and prepare adapters requirements - ${{ matrix.name }}
+        id: read
+        shell: python
+        env:
+          SERVICE_FILE: ${{ matrix.serviceFile }}
+        run: |
+          import os
+          import sys
+          import re
+          import subprocess
+          from datetime import datetime
+
+          service_file = os.environ['SERVICE_FILE']
+          # For UI, Dockerfile is usually hardcoded or looked up, but here we can stick to defaults
+          # or infer it. The bash script had logic to read lines. Let's replicate.
+
+          if not os.path.exists(service_file):
+              print(f"Service file not found: {service_file}", file=sys.stderr)
+              sys.exit(1)
+
+          with open(service_file, 'r') as f:
+              lines = [line.strip() for line in f if line.strip()]
+
+          if not lines or not lines[0].startswith('#!'):
+              print("Invalid file format: First line must start with #!IMAGE_ID", file=sys.stderr)
+              sys.exit(1)
+
+          # Line 1: Image ID
+          image_id = lines[0].lstrip('#!').strip()
+
+          # Dockerfile resolution (similar to bash script logic)
+          dockerfile = ""
+          if len(lines) > 1 and lines[1].startswith('#!'):
+             dockerfile = lines[1].lstrip('#!').strip()
+
+          if not dockerfile:
+             # Fallback
+              service_dir = os.path.dirname(service_file)
+              candidate = os.path.join(service_dir, 'Dockerfile')
+              if os.path.exists(candidate):
+                  dockerfile = candidate
+              else:
+                  # Try Dockerfile.ui as per old structure if Dockerfile not found
+                  candidate_ui = os.path.join(service_dir, 'Dockerfile.ui')
+                  if os.path.exists(candidate_ui):
+                      dockerfile = candidate_ui
+
+          if not dockerfile:
+              print("Dockerfile path not found.", file=sys.stderr)
+              sys.exit(1)
+
+          # Parse dependencies (usually none for UI, but keeping logic consistent)
+          deps = []
+          for line in lines:
+              if line.startswith('#!'): continue
+              if line.startswith('#'): continue
+
+              val = line.strip()
+
+              # Parse git://TAG//URL
+              m = re.match(r'git://([^/]+)//(.+)', val)
+              if m:
+                  tag = m.group(1)
+                  url_full = m.group(2)
+                  if '#' in url_full:
+                      base, frag = url_full.split('#', 1)
+                      req = f"git+{base}@{tag}#{frag}"
+                  else:
+                      req = f"git+{url_full}@{tag}"
+                  deps.append(req)
+              else:
+                  if val:
+                      deps.append(val)
+
+          # Write requirements file
+          with open('adapters.requirements.txt', 'w') as f:
+              f.write('\n'.join(deps))
+
+          print("---- adapters.requirements.txt ----")
+          print('\n'.join(deps))
+          print("----------------------------------")
+
+          # Git info
+          try:
+              commit_hash = subprocess.check_output(['git', '--no-pager', 'log', '-1', '--pretty=format:%H']).decode('utf-8').strip()
+          except:
+              commit_hash = "unknown"
+
+          created = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+
+          # Labels
+          vendor = image_id.split('/')[0] if '/' in image_id else "unknown"
+          try:
+              title = image_id.split('/')[1].split(':')[0]
+          except:
+              title = image_id
+
+          version = "latest"
+          if ':' in image_id:
+              version = image_id.split(':')[-1]
+
+          # Write to GITHUB_OUTPUT
+          github_output = os.environ.get('GITHUB_OUTPUT')
+          if github_output:
+              with open(github_output, 'a') as f:
+                  f.write(f"image={image_id}\n")
+                  f.write(f"dockerfile={dockerfile}\n")
+                  f.write(f"context=.\n")
+                  f.write(f"created={created}\n")
+                  f.write(f"commit={commit_hash}\n")
+                  f.write(f"vendor={vendor}\n")
+                  f.write(f"title={title}\n")
+                  f.write(f"version={version}\n")
+
+      - name: Build and push - ${{ matrix.name }}
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ steps.read.outputs.context }}
+          file: ${{ steps.read.outputs.dockerfile }}
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ steps.read.outputs.image }}
+          labels: |
+            org.opencontainers.image.created=${{ steps.read.outputs.created }}
+            org.opencontainers.image.authors=${{ github.repository_owner }}
+            org.opencontainers.image.source=${{ github.repository }}@${{ steps.read.outputs.commit }}
+            org.opencontainers.image.version=${{ steps.read.outputs.version }}
+            org.opencontainers.image.revision=${{ steps.read.outputs.commit }}
+            org.opencontainers.image.vendor=${{ steps.read.outputs.vendor }}
+            org.opencontainers.image.title=${{ steps.read.outputs.title }}
+            org.opencontainers.image.description=OpenG2P Staff Portal UI image
+            org.openg2p.service.name=${{ matrix.name }}

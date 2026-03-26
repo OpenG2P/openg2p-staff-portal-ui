@@ -81,6 +81,7 @@ export default function Home() {
                         >
                             Privacy Policy
                         </span>
+                        <div className="w-px h-4 bg-white opacity-70" />
                         <span
                             className="cursor-pointer hover:text-[#E9BC19]"
                             onClick={() => window.open("https://www.openg2p.org", "_blank")}

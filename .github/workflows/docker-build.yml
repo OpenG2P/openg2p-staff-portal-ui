@@ -12,7 +12,7 @@ jobs:
       matrix:
         include:
           - name: openg2p-staff-portal-ui
-            serviceFile: openg2p-staff-portal-ui/staff-portal-ui.txt
+            serviceFile: staff-portal-ui.txt
 
     steps:
       - uses: actions/checkout@v4

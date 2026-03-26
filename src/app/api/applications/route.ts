@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
 
     const backendConfig = getBackendConfig();
 
-    const iamUrl = `${backendConfig.iamUrl}/auth/get_staff_portal_applications`;
+    const iamUrl = `${backendConfig.iamUrl}/user-access/get_staff_portal_applications`;
 
     const res = await fetch(iamUrl, {
         method: 'GET',

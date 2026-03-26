@@ -26,7 +26,7 @@ export async function generateMetadata({
         title: "Openg2p",
         description: "",
         icons: {
-            icon: "/openg2p_logo.png",
+            icon: "/openg2p_logo_white.svg",
         },
     };
 }

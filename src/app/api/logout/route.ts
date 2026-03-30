@@ -15,8 +15,17 @@ export async function GET(req: NextRequest) {
 
     const res = NextResponse.redirect(backendConfig.keycloakLogoutUrl);
 
-    res.cookies.delete({ name: 'X-Access-Token', path: '/', domain: '.openg2p.my' });
-    res.cookies.delete({ name: 'X-ID-Token', path: '/', domain: '.openg2p.my' });
+    res.cookies.delete({
+        name: 'X-Access-Token',
+        path: '/',
+        domain: backendConfig.cookieDomain,
+    });
+
+    res.cookies.delete({
+        name: 'X-ID-Token',
+        path: '/',
+        domain: backendConfig.cookieDomain,
+    });
 
     return res;
 }

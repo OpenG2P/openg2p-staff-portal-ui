@@ -6,6 +6,7 @@ export function getBackendConfig() {
         iamUrl: process.env.IAM_URL ?? "",
         keycloakLogoutUrl: process.env.KEYCLOAK_LOGOUT_URL ?? "",
         loginProviderId: process.env.LOGIN_PROVIDER_ID ?? "",
-        cookieDomain: process.env.COOKIE_DOMAIN ?? ""
+        cookieDomain: process.env.COOKIE_DOMAIN ?? "",
+        redirectUrl: process.env.REDIRECT_URL
     };
 }

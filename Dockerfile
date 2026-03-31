@@ -4,8 +4,8 @@ WORKDIR /app
 FROM base AS builder
 
 RUN apk add --no-cache git
-ARG REPO_URL=https://github.com/OpenG2P/openg2p-staff-portal-ui
-ARG GIT_BRANCH=develop
+ARG REPO_URL
+ARG GIT_BRANCH
 RUN git clone --branch ${GIT_BRANCH} --depth 1 ${REPO_URL} .
 
 RUN npm ci

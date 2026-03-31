@@ -6,17 +6,37 @@ export async function GET(req: NextRequest) {
     const auth = requireAuth(req);
     if (auth instanceof NextResponse) return auth;
 
-    const backendConfig = getBackendConfig()
-    const iamUrl = `${backendConfig.iamUrl}${"/auth/logout"}`;
+    const backendConfig = getBackendConfig();
+
+    const idToken = req.cookies.get('X-ID-Token')?.value;
+
+    const redirectUri = `${backendConfig.redirectUrl}`;
+
+    const logoutUrl =
+        `${backendConfig.keycloakLogoutUrl}` +
+        `?post_logout_redirect_uri=${encodeURIComponent(redirectUri)}` +
+        (idToken ? `&id_token_hint=${idToken}` : '');
 
     try {
-        await fetch(iamUrl, { method: 'POST', headers: auth.backendHeaders });
+        await fetch(`${backendConfig.iamUrl}/auth/logout`, {
+            method: 'POST',
+            headers: auth.backendHeaders,
+        });
     } catch { }
 
-    const res = NextResponse.redirect(backendConfig.keycloakLogoutUrl);
+    const res = NextResponse.redirect(logoutUrl);
 
-    res.cookies.delete({ name: 'X-Access-Token', path: '/', domain: '.openg2p.my' });
-    res.cookies.delete({ name: 'X-ID-Token', path: '/', domain: '.openg2p.my' });
+    res.cookies.delete({
+        name: 'X-Access-Token',
+        path: '/',
+        domain: backendConfig.cookieDomain,
+    });
+
+    res.cookies.delete({
+        name: 'X-ID-Token',
+        path: '/',
+        domain: backendConfig.cookieDomain,
+    });
 
     return res;
 }

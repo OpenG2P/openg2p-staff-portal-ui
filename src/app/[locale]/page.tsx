@@ -44,7 +44,7 @@ export default function Home() {
                                     window.open(card.application_url, "_blank");
                                 }
                             }}
-                            className={`relative overflow-hidden h-38.25 bg-black p-7.5 flex flex-col justify-between border-[#292929] border-r border-b nth-[4n+1]:border-l nth-[-n+4]:border-t ${card.disabled ? "cursor-not-allowed" : "cursor-pointer group"}`}
+                            className={`relative overflow-hidden h-38.25 bg-black p-7.5 flex flex-col justify-between border-[#292929] border-r border-b nth-[4n+1]:border-l nth-[-n+4]:border-t ${card.disabled ? "" : "cursor-pointer group"}`}
                         >
                             {!card.disabled && (
                                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500 bg-[radial-gradient(circle_at_0%_100%,rgba(233,188,25,0.40)_0%,rgba(233,188,25,0.25)_35%,rgba(233,188,25,0.12)_55%,transparent_75%)]" />

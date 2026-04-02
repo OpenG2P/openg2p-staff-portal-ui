@@ -15,9 +15,9 @@ export default function Header() {
                 <Image
                     src={"/openg2p_logo.png"}
                     alt="Registry Logo"
-                    width={32}
-                    height={32}
-                    className="w-8 h-8 object-contain"
+                    width={40}
+                    height={40}
+                    className="w-10 h-10 object-contain"
                     unoptimized
                 />
                 <div className="flex items-center gap-3">

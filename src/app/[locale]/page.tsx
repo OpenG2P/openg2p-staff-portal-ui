@@ -1,8 +1,7 @@
 'use client';
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
-
+import { useTranslations } from 'next-intl';
 
 interface AppCard {
     id: number;
@@ -21,15 +20,17 @@ export default function Home() {
             .then(res => res.json())
             .then(data => setCards(data));
     }, []);
+
+    const t = useTranslations();
     return (
         <div className="w-full min-h-[calc(100vh-52px)] flex flex-col">
             <div className="w-full h-31.5 bg-[#E9BC19] flex flex-col items-center justify-center text-center">
                 <h1 className="font-['Roboto_Slab'] font-semibold text-[28px] leading-[100%]">
-                    Welcome to OpenG2P Staff Portal
+                    {t('welcomeTitle')}
                 </h1>
 
                 <p className="mt-2 font-['Roboto'] font-normal text-[16px] leading-[100%]">
-                    OpenG2P offers secure, open-source, and interoperable solutions to help governments and humanitarian organisations deliver social benefits efficiently.
+                    {t('welcomeDescription')}
                 </p>
             </div>
 
@@ -72,21 +73,21 @@ export default function Home() {
             <div className="w-full bg-[#191919]">
                 <div className="px-30 py-6 flex items-center justify-between text-white text-[14px] font-normal">
                     <div>
-                        © 2026 OpenG2P.org. All Rights Reserved.
+                        {t('footerCopyright')}
                     </div>
                     <div className="flex items-center gap-8">
                         <span
                             className="cursor-pointer hover:text-[#E9BC19]"
                             onClick={() => window.open("https://www.openg2p.org/privacy-policy", "_blank")}
                         >
-                            Privacy Policy
+                            {t('privacyPolicy')}
                         </span>
                         <div className="w-px h-4 bg-white opacity-70" />
                         <span
                             className="cursor-pointer hover:text-[#E9BC19]"
                             onClick={() => window.open("https://www.openg2p.org", "_blank")}
                         >
-                            Contact Us
+                            {t('contactUs')}
                         </span>
                     </div>
                 </div>

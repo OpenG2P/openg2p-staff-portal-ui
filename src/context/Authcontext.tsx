@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 
+import Image from 'next/image';
 
 interface AuthContextType {
     isLoggedIn: boolean;
@@ -61,6 +62,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
                 if (res.status === 413) {
                     setErrorCode('G2P-AUT-413');
+                    return;
+                }
+
+                if (res.status === 403) {
+                    setErrorCode('G2P-AUT-403');
                     return;
                 }
 
@@ -169,8 +175,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         );
     }
 
-    if (!isLoggedIn) return null;
+    if (errorCode === 'G2P-AUT-403' || !isLoggedIn) {
+        return (
+            <div className="w-full min-h-screen flex items-center justify-center bg-white px-4">
+                <div className="flex flex-1 items-center justify-start">
+                    <div className="w-full bg-white rounded-[10px] flex flex-col items-center text-center">
+                        <Image
+                            src="/forbidden.png"
+                            width={140}
+                            height={140}
+                            alt="Forbidden illustration"
+                            className="mb-6"
+                            priority
+                        />
 
+                        <h1 className="mb-4 text-[40px] font-semibold leading-11.75 text-[#ED7C22]">
+                            Access Denied
+                        </h1>
+
+                        <p className="mb-6 text-[20px] font-light leading-6 text-black/50 max-w-xl">
+                            You don't have permission to view this application.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
     return (
         <AuthContext.Provider value={{ isLoggedIn, user, logout, handleUnauthorized }}>
             {children}

@@ -3,16 +3,15 @@ import "@/commons/globals.css";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import { Header } from "@/components";
-import { Roboto } from 'next/font/google'
+import { Roboto_Slab } from 'next/font/google'
 import { AuthProvider } from "@/context/Authcontext";
 
-
-const roboto = Roboto({
+const robotoSlab = Roboto_Slab({
     weight: ['300', '400', '500', '700'],
     style: ['normal'],
     subsets: ['latin'],
     display: 'swap',
-})
+});
 
 export async function generateMetadata({
     params
@@ -44,7 +43,7 @@ export default async function RootLayout({
 
     return (
         <html lang={locale}>
-            <body className={`${roboto.className} antialiased`}>
+            <body className={`${robotoSlab.className} antialiased`}>
                 <NextIntlClientProvider messages={messages}>
                     <AuthProvider>
                         <Header />

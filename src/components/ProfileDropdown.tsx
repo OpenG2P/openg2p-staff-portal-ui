@@ -31,7 +31,7 @@ export default function ProfileDropdown() {
                 className="flex items-center gap-3 px-1 py-1 bg-white text-sm font-medium text-gray-800 rounded-md transition cursor-pointer"
             >
                 <span className="text-[16px] text-black font-normal">
-                    <span className="font-semibold">{displayName}</span>
+                    <span className="font-medium font-roboto">{displayName}</span>
                 </span>
 
                 <div className="w-9.5 h-9.5 rounded-full overflow-hidden drop-shadow-[0_4px_20px_rgba(0,0,0,0.25)]">
@@ -50,7 +50,7 @@ export default function ProfileDropdown() {
                     <div className="absolute -top-2.5 right-9 w-5 h-5 bg-[#E0E0E0] border-l border-t border-gray-200 rotate-45"></div>
 
                     <div className="flex flex-col">
-                        <Link
+                        {/* <Link
                             href={`/myprofile`}
                             onClick={() => setOpen(false)}
                             className="flex items-center gap-x-2 px-4 py-4 text-sm text-black font-bold"
@@ -62,11 +62,11 @@ export default function ProfileDropdown() {
                                 height={15}
                             />
                             {t('my_profile')}
-                        </Link>
+                        </Link> */}
 
                         <button
                             onClick={logoutHandler}
-                            className="flex items-center gap-x-2 px-4 pb-4 text-sm text-black font-bold"
+                            className="flex items-center gap-x-2 px-4 mt-4 pb-4 text-sm text-black font-bold font-roboto"
                         >
                             <Image
                                 src="/logout.png"

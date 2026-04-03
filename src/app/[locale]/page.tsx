@@ -25,11 +25,11 @@ export default function Home() {
     return (
         <div className="w-full min-h-[calc(100vh-52px)] flex flex-col">
             <div className="w-full h-31.5 bg-[#E9BC19] flex flex-col items-center justify-center text-center">
-                <h1 className="font-['Roboto_Slab'] font-semibold text-[28px] leading-[100%]">
+                <h1 className="font-roboto-slab font-semibold text-[28px] leading-[100%]">
                     {t('welcomeTitle')}
                 </h1>
 
-                <p className="mt-2 font-['Roboto'] font-normal text-[16px] leading-[100%]">
+                <p className="mt-2 font-normal font-roboto text-[16px] text-black/70">
                     {t('welcomeDescription')}
                 </p>
             </div>
@@ -62,7 +62,7 @@ export default function Home() {
                                 )}
                             </div>
 
-                            <div className={`relative z-10 text-white text-[20px] font-medium ${card.disabled ? "opacity-50" : ""}`}>
+                            <div className={`relative z-10 text-white text-[20px] font-roboto font-medium ${card.disabled ? "opacity-50" : ""}`}>
                                 {card.application_description}
                             </div>
                         </div>
@@ -71,7 +71,7 @@ export default function Home() {
             </div>
 
             <div className="w-full bg-[#191919]">
-                <div className="px-30 py-6 flex items-center justify-between text-white text-[14px] font-normal">
+                <div className="px-30 py-6 flex items-center justify-between text-white text-[14px] font-normal font-roboto">
                     <div>
                         {t('footerCopyright')}
                     </div>

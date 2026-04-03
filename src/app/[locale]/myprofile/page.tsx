@@ -3,9 +3,10 @@
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { useAuth } from '@/context/Authcontext';
 import Image from 'next/image';
-
+import { notFound } from 'next/navigation';
 
 export default function MyProfile() {
+    notFound()
     const { user } = useAuth()
 
     const profile = {

@@ -21,7 +21,7 @@ export default function Header() {
                     unoptimized
                 />
                 <div className="flex items-center gap-3">
-                    <span className="text-[20px] text-black font-medium">
+                    <span className="text-[20px] text-black font-medium font-roboto">
                         {"Staff Portal"}
                     </span>
                 </div>

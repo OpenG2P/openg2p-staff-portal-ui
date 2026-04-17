@@ -24,7 +24,7 @@ spec:
     - name: http
       port: {{ .Values.service.port }}
       protocol: TCP
-      targetPort: {{ .Values.containerPort }}
+      targetPort: http
   selector: {{- include "common.labels.matchLabels" (dict "customLabels" .Values.podLabels "context" $) | nindent 4 }}
     app.kubernetes.io/component: staff-portal-ui
 {{- end -}}

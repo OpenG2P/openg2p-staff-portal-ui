@@ -1,10 +1,10 @@
 global:
-  staffPortalHostname: "{{ .Release.Name }}.{{ .Release.Namespace }}.openg2p.org"
+  staffPortalHostname: 'staff-portal.{{ .Release.Namespace }}.openg2p.org'
 
 staffPortalUi:
   enabled: true
-  fullnameOverride: staff-portal-ui
-  hostname: "{{ tpl .Values.global.staffPortalHostname $ }}"
+  nameOverride: staff-portal-ui
+  hostname: '{{ tpl .Values.global.staffPortalHostname $ }}'
 
   replicaCount: 1
   autoscaling:
@@ -21,8 +21,17 @@ staffPortalUi:
 
   image:
     repository: openg2p/openg2p-staff-portal-ui
-    tag: "develop"
+    tag: 'develop'
     pullPolicy: Always
+
+  # -- Resource requests and limits for the container.
+  # resources:
+  #   requests:
+  #     cpu: 100m
+  #     memory: 256Mi
+  #   limits:
+  #     cpu: 500m
+  #     memory: 512Mi
 
   podSecurityContext:
     enabled: false
@@ -43,15 +52,15 @@ staffPortalUi:
     enabled: true
     virtualservice:
       enabled: true
-      host: "{{ tpl .Values.staffPortalUi.hostname $ }}"
+      host: '{{ tpl .Values.staffPortalUi.hostname $ }}'
       gateway: "internal"
       destination: ""
-      destinationPort: "{{ .Values.staffPortalUi.service.port }}"
-      prefix: "/"
-      rewriteUri: "/"
+      destinationPort: '{{ .Values.staffPortalUi.service.port }}'
+      prefix: /
+      rewriteUri: /
     gateway:
       enabled: false
-      host: "{{ tpl .Values.staffPortalUi.hostname $ }}"
+      host: '{{ tpl .Values.staffPortalUi.hostname $ }}'
       ingressController:
         istio: ingressgateway
       httpTlsRedirect: false

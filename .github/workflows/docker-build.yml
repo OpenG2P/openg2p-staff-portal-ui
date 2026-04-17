@@ -6,19 +6,13 @@ on:
       - "**"
     tags-ignore:
       - '**'
-    paths:
-      - 'src/**'
-      - 'public/**'
-      - 'locales/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - 'next.config.ts'
-      - 'tsconfig.json'
-      - 'tailwind.config.ts'
-      - 'postcss.config.mjs'
-      - 'eslint.config.mjs'
-      - 'Dockerfile'
-      - '.github/workflows/docker-build.yml'
+    paths-ignore:
+      - 'charts/**'
+      - '.github/workflows/publish-helm.yml'
+      - '**/*.md'
+      - 'LICENSE'
+      - '.gitignore'
+      - '.env.local'
   workflow_dispatch:
 
 env:

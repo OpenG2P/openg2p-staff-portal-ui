@@ -1,0 +1,48 @@
+{{- if .Values.staffPortalUi.enabled }}
+{{- $values := .Values.staffPortalUi -}}
+{{- $context := dict "Values" (merge (deepCopy $values) (dict "global" .Values.global)) "Chart" .Chart "Release" .Release "Files" .Files "Capabilities" .Capabilities -}}
+{{- with $context -}}
+{{- if .Values.istio.enabled }}
+{{- if .Values.istio.virtualservice.enabled }}
+{{- $istioVsHostname := include "common.tplvalues.render" (dict "value" .Values.istio.virtualservice.host "context" $) }}
+{{- $mainHostname := include "common.tplvalues.render" (dict "value" .Values.hostname "context" $) }}
+{{- $hostname := default $mainHostname $istioVsHostname }}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" $) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  hosts:
+  - {{ $hostname | quote }}
+  gateways:
+  - {{ default (include "common.names.fullname" .) .Values.istio.virtualservice.gateway }}
+  http:
+  - headers:
+      request:
+        set:
+          x-forwarded-host: {{ $hostname | quote }}
+          x-forwarded-proto: https
+    match:
+    - uri:
+        prefix: {{ include "common.tplvalues.render" (dict "value" .Values.istio.virtualservice.prefix "context" $) }}
+    {{- if .Values.istio.virtualservice.rewriteUri }}
+    rewrite:
+      uri: {{ include "common.tplvalues.render" (dict "value" .Values.istio.virtualservice.rewriteUri "context" $) }}
+    {{- end }}
+    route:
+    - destination:
+        {{- if .Values.istio.virtualservice.destination }}
+        host: {{ include "common.tplvalues.render" (dict "value" .Values.istio.virtualservice.destination "context" $) }}
+        {{- else }}
+        host: {{ include "common.names.fullname" . }}
+        {{- end }}
+        port:
+          number: {{ include "common.tplvalues.render" (dict "value" .Values.istio.virtualservice.destinationPort "context" $) }}
+{{- end }}
+{{- end }}
+{{- end -}}
+{{- end }}

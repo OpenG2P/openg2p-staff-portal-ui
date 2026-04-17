@@ -1,0 +1,98 @@
+global:
+  staffPortalHostname: "{{ .Release.Name }}.{{ .Release.Namespace }}.openg2p.org"
+
+staffPortalUi:
+  enabled: true
+  fullnameOverride: staff-portal-ui
+  hostname: "{{ tpl .Values.global.staffPortalHostname $ }}"
+
+  replicaCount: 1
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+  updateStrategy:
+    type: RollingUpdate
+  serviceAccount:
+    create: false
+    name: ""
+
+  image:
+    repository: openg2p/openg2p-staff-portal-ui
+    tag: "develop"
+    pullPolicy: Always
+
+  podSecurityContext:
+    enabled: false
+    fsGroup: 1001
+  containerSecurityContext:
+    enabled: false
+    runAsUser: 1001
+    runAsNonRoot: true
+
+  service:
+    type: ClusterIP
+    port: 80
+    externalTrafficPolicy: Cluster
+
+  containerPort: 3000
+
+  istio:
+    enabled: true
+    virtualservice:
+      enabled: true
+      host: "{{ tpl .Values.staffPortalUi.hostname $ }}"
+      gateway: "internal"
+      destination: ""
+      destinationPort: "{{ .Values.staffPortalUi.service.port }}"
+      prefix: "/"
+      rewriteUri: "/"
+    gateway:
+      enabled: false
+      host: "{{ tpl .Values.staffPortalUi.hostname $ }}"
+      ingressController:
+        istio: ingressgateway
+      httpTlsRedirect: false
+      httpEnabled: true
+      httpsEnabled: false
+      tls:
+        mode: SIMPLE
+        credentialName: ""
+
+  envVars:
+    HOSTNAME: 0.0.0.0
+    NODE_ENV: production
+  envVarsFrom: {}
+
+  startupProbe:
+    enabled: true
+    httpGet:
+      path: /
+      port: http
+    initialDelaySeconds: 0
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 30
+    successThreshold: 1
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /
+      port: http
+    initialDelaySeconds: 20
+    periodSeconds: 30
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /
+      port: http
+    initialDelaySeconds: 0
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1

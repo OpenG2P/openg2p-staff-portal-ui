@@ -1,0 +1,40 @@
+questions:
+
+# General
+- variable: global.staffPortalHostname
+  description: Hostname under which the Staff Portal UI will be accessed
+  type: string
+  label: Staff Portal Hostname
+  group: General
+
+- variable: staffPortalUi.enabled
+  description: Install Staff Portal UI
+  type: boolean
+  label: Staff Portal UI
+  group: General
+
+# Image
+- variable: staffPortalUi.image.repository
+  description: Docker image repository for Staff Portal UI
+  type: string
+  label: Image Repository
+  group: Image
+
+- variable: staffPortalUi.image.tag
+  description: Docker image tag
+  type: string
+  label: Image Tag
+  group: Image
+
+# Scaling
+- variable: staffPortalUi.replicaCount
+  description: Number of replicas
+  type: int
+  label: Replica Count
+  group: Scaling
+
+- variable: staffPortalUi.autoscaling.enabled
+  description: Enable Horizontal Pod Autoscaler
+  type: boolean
+  label: Enable HPA
+  group: Scaling

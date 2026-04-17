@@ -1,0 +1,15 @@
+apiVersion: v2
+name: openg2p-staff-portal-ui
+description: A Helm chart for OpenG2P Staff Portal UI
+type: application
+version: 0.0.0-develop
+icon: https://openg2p.github.io/openg2p-helm/openg2p-logo.png
+keywords:
+  - openg2p
+  - staff-portal-ui
+maintainers:
+  - email: info@openg2p.org
+    name: OpenG2P
+annotations:
+  catalog.cattle.io/display-name: "OpenG2P Staff Portal UI"
+  openg2p.org/add-to-rancher: ""

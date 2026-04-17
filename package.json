@@ -1,6 +1,6 @@
 {
-  "name": "landingpage",
-  "version": "0.1.0",
+  "name": "openg2p-staff-portal-ui",
+  "version": "1.0.0-develop",
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",

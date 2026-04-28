@@ -91,8 +91,11 @@ staffPortalUi:
     HOSTNAME: 0.0.0.0
     NODE_ENV: production
     COOKIE_DOMAIN: '{{ tpl .Values.global.cookieDomain $ }}'
-    IAM_URL: '{{ .Values.global.iamServiceUrl }}'
-    KEYCLOAK_LOGOUT_URL: '{{ tpl .Values.global.keycloakIssuerUrl $ }}/protocol/openid-connect/logout'
+    IAM_URL: '{{ tpl .Values.global.iamServiceUrl $ }}'
+    # Build logout URL from keycloakBaseUrl + realm directly (always browser-facing).
+    # Avoids conflict with parent charts that set global.keycloakIssuerUrl to an
+    # internal URL for backend services.
+    KEYCLOAK_LOGOUT_URL: '{{ tpl .Values.global.keycloakBaseUrl $ }}/realms/{{ tpl .Values.global.keycloakRealm $ }}/protocol/openid-connect/logout'
     LOGIN_PROVIDER_ID: '1'
     REDIRECT_URL: 'https://{{ tpl .Values.global.staffPortalHostname $ }}'
   envVarsFrom: {}

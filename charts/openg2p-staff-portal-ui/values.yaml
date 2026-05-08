@@ -38,7 +38,7 @@ staffPortalUi:
 
   image:
     repository: openg2p/openg2p-staff-portal-ui
-    tag: 'develop'
+    tag: '1.1.0'
     pullPolicy: Always
 
   # -- Resource requests and limits for the container.

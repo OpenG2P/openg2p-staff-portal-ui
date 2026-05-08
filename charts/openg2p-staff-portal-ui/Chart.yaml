@@ -2,7 +2,7 @@ apiVersion: v2
 name: openg2p-staff-portal-ui
 description: A Helm chart for OpenG2P Staff Portal UI
 type: application
-version: 0.0.0-develop
+version: 1.1.0-develop
 dependencies:
   - name: common
     repository: https://openg2p.github.io/openg2p-helm

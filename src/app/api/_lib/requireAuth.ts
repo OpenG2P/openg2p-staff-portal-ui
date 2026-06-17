@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { buildBackendAuthHeaders } from './auth-cookies';
+
 export interface AuthContext {
     accessToken: string;
     backendHeaders: Record<string, string>;
@@ -46,10 +48,6 @@ export function requireAuth(req: NextRequest): AuthContext | NextResponse {
     }
     return {
         accessToken,
-        backendHeaders: {
-            'Content-Type': 'application/json',
-            accept: 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-        },
+        backendHeaders: buildBackendAuthHeaders(req.cookies, accessToken),
     };
 }

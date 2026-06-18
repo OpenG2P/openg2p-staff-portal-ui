@@ -44,13 +44,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     } catch { }
 
                     const errorObj = error?.errors?.[0] || {};
-                    const code = errorObj.code;
-                    const message = (errorObj.message || "").toLowerCase();
+                    const code =
+                        errorObj.code ||
+                        error?.response_header?.response_error_code ||
+                        error?.code;
+                    const message = (
+                        errorObj.message ||
+                        error?.response_header?.response_error_message ||
+                        error?.error ||
+                        ""
+                    ).toLowerCase();
 
                     if (
                         message.includes("expired") ||
                         message.includes("invalid jwt") ||
                         message.includes("inactive token") ||
+                        message.includes("session has ended") ||
+                        message.includes("refresh failed") ||
                         code === 'G2P-AUT-LOGIN-REQUIRED'
                     ) {
                         handleUnauthorized();

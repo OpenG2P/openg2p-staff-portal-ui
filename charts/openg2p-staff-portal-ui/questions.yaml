@@ -20,34 +20,10 @@ questions:
   group: General
 
 # Security & Authentication
-- variable: global.cookieDomain
-  description: Cookie domain shared across Staff Portal UI and sibling APIs. Scoped to namespace by default to prevent cross-environment cookie leakage.
-  type: string
-  label: Cookie Domain
-  group: Security & Authentication
-
 - variable: global.iamServiceUrl
   description: Internal URL of the IAM (Staff Portal API) service
   type: string
   label: IAM Service URL
-  group: Security & Authentication
-
-- variable: global.keycloakBaseUrl
-  description: Base URL of the Keycloak server
-  type: string
-  label: Keycloak Base URL
-  group: Security & Authentication
-
-- variable: global.keycloakRealm
-  description: Keycloak realm used for Staff Portal authentication
-  type: string
-  label: Keycloak Realm
-  group: Security & Authentication
-
-- variable: global.keycloakIssuerUrl
-  description: Full Keycloak issuer URL (derived from Keycloak Base URL and Realm by default)
-  type: string
-  label: Keycloak Issuer URL
   group: Security & Authentication
 
 # Image

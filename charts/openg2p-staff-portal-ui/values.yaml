@@ -5,16 +5,6 @@ global:
 
   staffPortalHostname: 'staff-portal.{{ .Release.Namespace }}.{{ tpl .Values.global.domain $ }}'
 
-  # -- Cookie domain shared across staff portal UI and sibling APIs.
-  # Scoped to namespace by default so cookies from one environment do not
-  # leak to sibling environments on the same base domain.
-  cookieDomain: '.{{ .Release.Namespace }}.{{ tpl .Values.global.domain $ }}'
-
-  # Security & Authentication
-  keycloakBaseUrl: 'https://keycloak.{{ .Release.Namespace }}.{{ tpl .Values.global.domain $ }}'
-  keycloakRealm: 'staff'
-  keycloakIssuerUrl: '{{ tpl .Values.global.keycloakBaseUrl $ }}/realms/{{ tpl .Values.global.keycloakRealm $ }}'
-
   # IAM service internal URL
   iamServiceUrl: 'http://commons-services-iam-staff-portal-api'
 
@@ -90,12 +80,7 @@ staffPortalUi:
   envVars:
     HOSTNAME: 0.0.0.0
     NODE_ENV: production
-    COOKIE_DOMAIN: '{{ tpl .Values.global.cookieDomain $ }}'
     IAM_URL: '{{ tpl .Values.global.iamServiceUrl $ }}'
-    # Build logout URL from keycloakBaseUrl + realm directly (always browser-facing).
-    # Avoids conflict with parent charts that set global.keycloakIssuerUrl to an
-    # internal URL for backend services.
-    KEYCLOAK_LOGOUT_URL: '{{ tpl .Values.global.keycloakBaseUrl $ }}/realms/{{ tpl .Values.global.keycloakRealm $ }}/protocol/openid-connect/logout'
     LOGIN_PROVIDER_ID: '1'
     REDIRECT_URL: 'https://{{ tpl .Values.global.staffPortalHostname $ }}'
   envVarsFrom: {}

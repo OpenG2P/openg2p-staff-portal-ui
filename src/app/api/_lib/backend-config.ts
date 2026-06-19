@@ -5,6 +5,5 @@ export function getBackendConfig() {
     return {
         iamUrl: process.env.IAM_URL ?? "",
         loginProviderId: process.env.LOGIN_PROVIDER_ID ?? "",
-        redirectUrl: process.env.REDIRECT_URL
     };
 }

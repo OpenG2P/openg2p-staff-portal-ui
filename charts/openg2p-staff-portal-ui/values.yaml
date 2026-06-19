@@ -82,7 +82,6 @@ staffPortalUi:
     NODE_ENV: production
     IAM_URL: '{{ tpl .Values.global.iamServiceUrl $ }}'
     LOGIN_PROVIDER_ID: '1'
-    REDIRECT_URL: 'https://{{ tpl .Values.global.staffPortalHostname $ }}'
   envVarsFrom: {}
 
   startupProbe:

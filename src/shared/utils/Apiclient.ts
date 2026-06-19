@@ -1,3 +1,5 @@
+import { withCsrfHeaders } from './csrf';
+
 const UNAUTHORIZED_CODE = 'G2P-AUT-401';
 
 function isUnauthorizedBody(data: unknown): boolean {
@@ -48,7 +50,10 @@ export const apiClient = {
         fetch(url, {
             method: 'POST',
             credentials: 'include',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            headers: withCsrfHeaders('POST', {
+                'Content-Type': 'application/json',
+                ...options?.headers,
+            }),
             body: body !== undefined ? JSON.stringify(body) : undefined,
             ...options,
         }).then(parseResponse<T>),

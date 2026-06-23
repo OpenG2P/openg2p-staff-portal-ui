@@ -1,10 +1,13 @@
 import { NextResponse } from 'next/server';
 
+import { CSRF_COOKIE_NAME, CSRF_HEADER_NAME } from '@/shared/utils/csrf';
+
 /** Auth cookies set by IAM OAuth callback; must reach backend for silent refresh. */
 export const AUTH_COOKIE_NAMES = [
     'X-Access-Token',
     'X-ID-Token',
     'X-Session-Id',
+    CSRF_COOKIE_NAME,
 ] as const;
 
 type CookieReader = {
@@ -34,6 +37,10 @@ export function buildBackendAuthHeaders(
     const cookieHeader = buildAuthCookieHeader(cookieReader);
     if (cookieHeader) {
         headers.Cookie = cookieHeader;
+    }
+    const csrfToken = cookieReader.get(CSRF_COOKIE_NAME)?.value;
+    if (csrfToken) {
+        headers[CSRF_HEADER_NAME] = csrfToken;
     }
     return headers;
 }

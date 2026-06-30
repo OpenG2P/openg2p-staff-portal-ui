@@ -5,8 +5,7 @@ global:
 
   staffPortalHostname: 'staff-portal.{{ .Release.Namespace }}.{{ tpl .Values.global.domain $ }}'
 
-  # IAM service internal URL
-  iamServiceUrl: 'http://commons-services-iam-staff-portal-api'
+  iamUrl: 'https://staff-iam.{{ .Release.Namespace }}.{{ tpl .Values.global.domain $ }}'
 
 staffPortalUi:
   enabled: true
@@ -80,8 +79,9 @@ staffPortalUi:
   envVars:
     HOSTNAME: 0.0.0.0
     NODE_ENV: production
-    IAM_URL: '{{ tpl .Values.global.iamServiceUrl $ }}'
+    IAM_URL: '{{ tpl .Values.global.iamUrl $ }}'
     LOGIN_PROVIDER_ID: '1'
+    COOKIE_DOMAIN: '.{{ .Release.Namespace }}.{{ tpl .Values.global.domain $ }}'
   envVarsFrom: {}
 
   startupProbe:

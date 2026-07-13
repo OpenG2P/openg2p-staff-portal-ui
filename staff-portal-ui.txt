@@ -1,3 +1,0 @@
-#!openg2p/openg2p-staff-portal-ui:develop
-
-git://develop//https://github.com/OpenG2P/openg2p-staff-portal-ui

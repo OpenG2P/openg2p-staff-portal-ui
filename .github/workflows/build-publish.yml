@@ -1,0 +1,39 @@
+name: Build & Publish
+
+on:
+  push:
+    branches: ["**"]
+    tags: ["**"]
+  workflow_dispatch:
+    inputs:
+      changelog_skip_ai:
+        description: 'Skip the AI summary — publish the changelog from commit messages only (use when AI is unavailable). Leave OFF for a normal run.'
+        type: boolean
+        default: false
+      changelog_regenerate:
+        description: 'Backfill the AI summary for a release that published without one: enter its frozen version e.g. 1.0.1 (not a develop version). Leave EMPTY for a normal run.'
+        type: string
+        default: ''
+
+jobs:
+  build-publish:
+    uses: openg2p/openg2p-packaging/.github/workflows/build-publish.yml@v1
+    with:
+      changelog_skip_ai: ${{ inputs.changelog_skip_ai || false }}
+      changelog_regenerate: ${{ inputs.changelog_regenerate || '' }}
+      images: |
+        [
+          {"name": "staff-portal-ui",
+           "repo": "openg2p/openg2p-staff-portal-ui",
+           "dockerfile": "Dockerfile"}
+        ]
+      chart-path: charts/openg2p-staff-portal-ui
+      chart-image-paths: |
+        [".staffPortalUi.image.tag"]
+      packaging-ref: v1
+
+    secrets:
+      docker_hub_actor: ${{ secrets.docker_hub_actor }}
+      docker_hub_token: ${{ secrets.docker_hub_token }}
+      OPENG2P_BOT_GITHUB_PAT: ${{ secrets.OPENG2P_BOT_GITHUB_PAT }}
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}

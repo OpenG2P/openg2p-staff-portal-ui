@@ -3,12 +3,10 @@ WORKDIR /app
 
 FROM base AS builder
 
-RUN apk add --no-cache git
-ARG REPO_URL
-ARG GIT_BRANCH
-RUN git clone --branch ${GIT_BRANCH} --depth 1 ${REPO_URL} .
-
+COPY package*.json ./
 RUN npm ci
+
+COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 

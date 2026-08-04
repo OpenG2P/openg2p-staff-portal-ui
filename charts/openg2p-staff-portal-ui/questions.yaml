@@ -20,10 +20,10 @@ questions:
   group: General
 
 # Security & Authentication
-- variable: global.iamServiceUrl
-  description: Internal URL of the IAM (Staff Portal API) service
+- variable: global.iamUrl
+  description: HTTPS URL of the IAM service (used by Staff Portal UI for login/logout)
   type: string
-  label: IAM Service URL
+  label: IAM URL
   group: Security & Authentication
 
 # Image

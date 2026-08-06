@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from 'next-intl';
+import { IconDisplay } from '@/components';
 
 interface AppCard {
     id: number;
@@ -51,15 +52,7 @@ export default function Home() {
                             )}
 
                             <div className={`relative z-10 ${card.disabled ? "opacity-50" : ""}`}>
-                                {card.icon_base64 ? (
-                                    <img
-                                        src={`data:image/svg+xml;base64,${card.icon_base64}`}
-                                        className="h-10"
-                                        alt={card.application_description}
-                                    />
-                                ) : (
-                                    <div className="h-10 w-10 bg-gray-500" />
-                                )}
+                                <IconDisplay icon_base64={card.icon_base64} />
                             </div>
 
                             <div className={`relative z-10 text-white text-[20px] font-roboto font-medium ${card.disabled ? "opacity-50" : ""}`}>
